@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- meta tags: HTML -->
+    <meta charset="UTF-8">
+    <title>Animals Sounds</title>
+    <meta name="author" content="Elmahdi KORFED" />
+    <meta name="title" content="Elmahdi KORFED">
+    <meta name="description" content="Animal sounds of the world" />
+    <meta name="keywords" content="Elmahdi Korfed, Developer, Web, France, flags, game, world, countries" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#fff">
+
+    <!-- meta tags: OPEN GRAPH -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Elmahdi KORFED" />
+    <meta property="og:title" content="Elmahdi KORFED" />
+    <meta property="og:image" content="./assets/images/ek.jpg" />
+    <meta property="og:description" content="Learn more about Elmahdi KORFED, a passionate developer!" />
+    <meta property="og:url" content="https://elmahdik.github.io/" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- link -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐸</text></svg>">
+    <link rel="apple-touch-startup-image" href="./assets/images/logo/icon_192.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Heebo">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" />
+
+</head>
+
+<body>
+    <style>
+        #app {
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --colorWHITE: #fff;
+            --colorBLACK: #000;
+            --colorMAIN: #fafafa;
+            --colorGRAY: #ddd;
+        }
+
+        /* -- dark mode -- */
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                --colorWHITE: #16212b;
+                --colorBLACK: #cecdcd;
+                --colorMAIN: #1b1c23;
+                --colorGRAY: #9fb9ce;
+            }
+        }
+
+        /* -- all -- */
+
+        * {
+            margin: 0px;
+            padding: 0px;
+            border: 0px;
+            border-collapse: collapse;
+            vertical-align: top;
+            color: var(--colorBLACK);
+            font-weight: 300;
+            font-family: "Heebo", Arial, Helvetica, sans-serif;
+        }
+
+        *:focus {
+            outline: none;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {}
+
+        a {
+            text-decoration: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* -- header -- */
+
+        header {
+            height: 10vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header span {
+            font-size: 40px;
+            text-transform: uppercase;
+        }
+
+        /* -- main -- */
+
+        main {
+            background-color: #eee;
+            width: 100vw;
+            height: 90vh;
+            overflow-y: scroll;
+            display: flex;
+            flex-direction: row;
+        }
+
+        main ul {
+            width: 100%;
+            list-style: none;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            align-content: flex-start;
+        }
+
+        main ul li {
+            width: calc(20% - 2px);
+            margin: 1px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .square {
+            position: relative;
+            width: 100%;
+        }
+
+        .square:after {
+            content: "";
+            display: block;
+            padding-bottom: 100%;
+        }
+
+        main ul li img {
+            border: 1px solid var(--colorBLACK);
+            object-position: 50% 50%;
+            width: calc(100% - 2px);
+            height: calc(100% - 2px);
+            position: absolute;
+            object-fit: cover;
+        }
+
+        .imgMove {
+            object-position: 20% 50%;
+        }
+
+        main ul li p {
+            background: linear-gradient(0deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.0));
+            color: #fff;
+
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 14px;
+            padding: 10px;
+
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            height: 25%;
+        }
+
+        main ul li audio {
+            display: none;
+        }
+
+        /* -- mobile --*/
+
+        @media screen and (max-width: 800px) {
+            header {}
+
+            header span {
+                font-size: 20px;
+            }
+
+            main {}
+
+            main ul {
+                flex-direction: row;
+            }
+
+            main ul li {
+                width: calc(50% - 24px);
+            }
+        }
+    </style>
+
+    <div id="app">
+        <header>
+            <span>{{ title }}</span>
+        </header>
+        <main>
+            <ul>
+                <li v-for="item in animals" @click="playAudio(item.name)">
+                    <div class="square">
+                        <img :src="item.img" :alt="item.name"
+                            onerror="this.onerror=null; this.src='./assets/images/notfound.jpg'">
+                        <p class="p_title">{{ item.name }}</p>
+                    </div>
+                </li>
+            </ul>
+            <audio controls ref="audio" class="hidden"></audio>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+        const app = new Vue({
+            el: `#app`,
+            data: {
+                title: "Animals Sounds",
+                animals: []
+            },
+            mounted: function () {
+                this.loadAnimals()
+            },
+            methods: {
+                playAudio(_name) {
+                    this.$refs.audio.src = `https://www.google.com/logos/fnbx/animal_sounds/${_name}.mp3`;
+                    this.$refs.audio.play();
+                },
+                loadAnimals() {
+                    fetch(new Request(`./data.json`, {
+                        method: `GET`,
+                        headers: new Headers(),
+                        mode: `cors`,
+                        cache: `default`
+                    })).then(response => {
+                        if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+                        return response.json();
+                    }).then(d => {
+                        this.animals = d;
+                    });
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
